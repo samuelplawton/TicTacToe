@@ -23,7 +23,7 @@ int main() {
 
             // ===== HUMAN TURN =====
             int row, col;
-            std::cout << "Enter row and col (0–2): ";
+            std::cout << "Enter row and col (0-2): ";
 
             // Validate input: if the user types non-integers, clear and retry.
             if (!(std::cin >> row >> col)) {
