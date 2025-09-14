@@ -21,11 +21,11 @@ private:
     int scoreHuman = 0;                         // Accumulated score for the human player
     int scoreCPU   = 0;                         // Accumulated score for the CPU player
 
-    // Label-to-index helpers (case-insensitive for row labels). Implemented in .cpp
+public:
+    // Public helpers so UI code can convert labels
     static int rowIndexFromLabel(char rowLabel);   // 'A'/'a'->0, 'B'/'b'->1, 'C'/'c'->2; returns -1 if invalid
     static int colIndexFromLabel(int colLabel);    // 1->0, 2->1, 3->2; returns -1 if invalid
 
-public:
     TicTacToe();                                // Constructor to initialize the game
 
     // Round lifecycle
