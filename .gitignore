@@ -1,21 +1,28 @@
-# Build output
-/build/
-/dist/
-/out/
-/bin/
-/obj/
-/CMakeFiles/
-/CMakeCache.txt
+# Visual Studio (match anywhere)
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+*.ipch
+*.opensdf
+*.sdf
+*.cachefile
 
-# VS Code cache
-.vscode/ipch/
-.vscode/*.log
+# Build outputs
+Debug/
+Release/
+x64/
+x86/
+arm64/
 
-# OS junk
-.DS_Store
-Thumbs.db
-
-# Windows artifacts
-*.exe
-*.pdb
+# Obj & bin files
 *.obj
+*.pdb
+*.ilk
+*.log
+*.tlog
+*.idb
+*.exe
+*.dll
+*.lib
+*.exp
