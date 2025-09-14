@@ -11,7 +11,7 @@
 // - Ask if the user wants to play another round
 int main() {
     TicTacToe game;     // Owns board/state/scores and all game logic methods
-    char choice = 'y';  // User’s replay response
+    char choice = 'y';  // Userï¿½s replay response
 
     do {
         // --- New Round ---
@@ -23,7 +23,7 @@ int main() {
 
             // ===== HUMAN TURN =====
             int row, col;
-            std::cout << "Enter row and col (0–2): ";
+            std::cout << "Enter row and col (0-2): ";
 
             // Validate input: if the user types non-integers, clear and retry.
             if (!(std::cin >> row >> col)) {
