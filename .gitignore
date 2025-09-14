@@ -1,0 +1,21 @@
+# Build output
+/build/
+/dist/
+/out/
+/bin/
+/obj/
+/CMakeFiles/
+/CMakeCache.txt
+
+# VS Code cache
+.vscode/ipch/
+.vscode/*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Windows artifacts
+*.exe
+*.pdb
+*.obj
