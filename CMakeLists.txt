@@ -1,28 +1,28 @@
 cmake_minimum_required(VERSION 3.20)
-project(buildtemplate LANGUAGES CXX)
+project(tictactoe LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Put binaries under build/bin
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-# Library (rename/remove later if you want)
-add_library(buildtemplate
-    src/Example.cpp
+add_executable(${PROJECT_NAME}
+  main.cpp
+  src/Logic.cpp
+  # src/Interface.cpp   # leave out if it has its own main()
 )
-target_include_directories(buildtemplate PUBLIC include)
 
-# App / CLI
-add_executable(buildtemplate_app
-    src/main.cpp
+target_include_directories(${PROJECT_NAME} PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_SOURCE_DIR}/include"
 )
-target_link_libraries(buildtemplate_app PRIVATE buildtemplate)
 
-# Platform flags (optional)
-if (WIN32)
-  target_compile_definitions(buildtemplate_app PRIVATE BT_WINDOWS)
-elseif(APPLE)
-  target_compile_definitions(buildtemplate_app PRIVATE BT_MACOS)
-else()
-  target_compile_definitions(buildtemplate_app PRIVATE BT_LINUX)
+# Embed icon from app.ico
+if(WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/app.ico")
+  file(WRITE "${CMAKE_BINARY_DIR}/appicon.rc"
+    "IDI_APP_ICON ICON \"${CMAKE_SOURCE_DIR}/app.ico\"\n")
+  target_sources(${PROJECT_NAME} PRIVATE "${CMAKE_BINARY_DIR}/appicon.rc")
 endif()
+
+# Static runtime for a more standalone feel
+if(MSVC)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
