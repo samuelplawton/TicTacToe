@@ -1,5 +1,10 @@
 {
   "cmake.configureOnOpen": true,
   "cmake.buildDirectory": "build",
-  "cmake.generator": "Ninja"
+  "cmake.generator": "Ninja",
+  "files.associations": {
+    "__split_buffer": "cpp",
+    "deque": "cpp",
+    "vector": "cpp"
+  }
 }
