@@ -41,19 +41,26 @@ int Interface::run() {
 
 // Prompt the user for their move and validate the input
 std::pair<int,int> Interface::promptMove() const {
-    int row, col; // Variables to store row and column input from the user
-    cout << "Enter row and col (0-2): "; // Ask the user for input
-    if (!(cin >> row >> col)) { // If the input is not two integers
-        cin.clear(); // Clear the error flag on cin
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the rest of the input line
-        cout << "Invalid input. Please enter two integers from 0 to 2.\n"; // Inform the user of invalid input
-        return {-1, -1}; // Return invalid coordinates
+    char rowChar;
+    int colNum;
+    cout << "Enter row (A-C) and column (1-3), e.g. B 2: ";
+    if (!(cin >> rowChar >> colNum)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input. Please enter a row letter (A-C) and a column number (1-3).\n";
+        return {-1, -1};
     }
-    if (row < 0 || row > 2 || col < 0 || col > 2) { // If row or column is out of the allowed range
-        cout << "Out of range. Use 0, 1, or 2.\n"; // Inform the user of out-of-range input
-        return {-1, -1}; // Return invalid coordinates
+    // Normalize rowChar to uppercase
+    if (rowChar >= 'a' && rowChar <= 'z') {
+        rowChar = rowChar - 'a' + 'A';
     }
-    return {row, col}; // Return the valid row and column
+    int row = TicTacToe::rowIndexFromLabel(rowChar);
+    int col = TicTacToe::colIndexFromLabel(colNum);
+    if (row < 0 || col < 0) {
+        cout << "Out of range. Use row letters A, B, or C and column numbers 1, 2, or 3.\n";
+        return {-1, -1};
+    }
+    return {row, col};
 }
 
 // Ask the user if they want to play again
