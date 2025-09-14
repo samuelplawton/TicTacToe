@@ -136,7 +136,7 @@ void TicTacToe::computerMove() {
             if (board[r][c] == ' ') empty.emplace_back(r, c);
         }
     }
-    if (empty.empty()) return;                 // Safety check (shouldn’t happen if RUNNING)
+    if (empty.empty()) return;                 // Safety check (shouldnï¿½t happen if RUNNING)
 
     // Pseudo-random engine seeded with current time.
     static std::mt19937 rng(
