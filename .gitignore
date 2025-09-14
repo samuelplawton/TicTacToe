@@ -1,5 +1,7 @@
-# Visual Studio (match anywhere)
-.vs/
+# Ignore VS cache anywhere in the tree
+**/.vs/
+
+# Visual Studio user files
 *.vcxproj.user
 *.suo
 *.user
@@ -15,7 +17,7 @@ x64/
 x86/
 arm64/
 
-# Obj & bin files
+# Obj & bin
 *.obj
 *.pdb
 *.ilk
