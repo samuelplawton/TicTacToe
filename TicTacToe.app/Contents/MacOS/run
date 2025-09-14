@@ -1,9 +1,0 @@
-#!/bin/zsh
-APP_DIR="$(cd "$(dirname "$0")" && pwd)"
-/usr/bin/osascript <<EOF
-tell application "Terminal"
-  activate
-  do script quoted form of ("$APP_DIR/TicTacToe")
-end tell
-EOF
-exit 0
