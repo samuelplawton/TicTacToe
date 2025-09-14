@@ -1,28 +1,14 @@
-cmake_minimum_required(VERSION 3.20)
-project(buildtemplate LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.16)
+
+project(tictactoe LANGUAGES CXX)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Put binaries under build/bin
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# Find all .cpp in src/
+file(GLOB SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+message(STATUS "Sources: ${SOURCES}")
 
-# Library (rename/remove later if you want)
-add_library(buildtemplate
-    src/Example.cpp
-)
-target_include_directories(buildtemplate PUBLIC include)
-
-# App / CLI
-add_executable(buildtemplate_app
-    src/main.cpp
-)
-target_link_libraries(buildtemplate_app PRIVATE buildtemplate)
-
-# Platform flags (optional)
-if (WIN32)
-  target_compile_definitions(buildtemplate_app PRIVATE BT_WINDOWS)
-elseif(APPLE)
-  target_compile_definitions(buildtemplate_app PRIVATE BT_MACOS)
-else()
-  target_compile_definitions(buildtemplate_app PRIVATE BT_LINUX)
-endif()
+add_executable(tictactoe ${SOURCES})
+target_include_directories(tictactoe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
