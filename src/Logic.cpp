@@ -1,8 +1,9 @@
-#include "driver.h" // Include the header file for TicTacToe class and related declarations
+#include "Driver.h" // Include the header file for TicTacToe class and related declarations
 #include <iostream> // For input/output stream operations
 #include <random>   // For random number generation (used in computerMove)
 #include <chrono>   // For time-related functions (used to seed RNG)
 #include <vector>   // For using std::vector (used in computerMove)
+#include <cctype>
 
 using std::cout; // Use cout from std namespace
 
@@ -18,10 +19,11 @@ void TicTacToe::resetGame() { // Reset the game board and state
 }
 
 void TicTacToe::drawBoard() const { // Draw the current state of the board
-    cout << "\n    0   1   2\n"; // Print column headers
+    const char rowLabels[3] = {'A', 'B', 'C'};
+    cout << "\n    1   2   3\n"; // Print column headers (changed to 1 2 3)
     for (int r = 0; r < 3; ++r) { // For each row
         cout << "  -------------\n"; // Print horizontal line
-        cout << r << " |"; // Print row number and left border
+        cout << rowLabels[r] << " |"; // Print row label (A, B, C) and left border
         for (int c = 0; c < 3; ++c) { // For each column
             cout << " " << board[r][c] << " |"; // Print cell value and right border
         }
@@ -117,4 +119,43 @@ void TicTacToe::printResult() { // Print the result of the game and update score
 void TicTacToe::printScores() const { // Print the scores of both players
     std::cout << "Human Score: " << scoreHuman
               << " | Computer Score: " << scoreCPU << "\n"; // Print scores
+}
+// ──────────────────────────────────────────────────────────────
+// Label-to-index helpers (declared static in Driver.h)
+int TicTacToe::rowIndexFromLabel(char rowLabel) {
+    unsigned char ch = static_cast<unsigned char>(rowLabel);
+    ch = static_cast<unsigned char>(std::toupper(ch));
+    if (ch < 'A' || ch > 'C') return -1;
+    return static_cast<int>(ch - 'A');
+}
+
+int TicTacToe::colIndexFromLabel(int colLabel) {
+    if (colLabel < 1 || colLabel > 3) return -1;
+    return colLabel - 1;
+}
+
+// ──────────────────────────────────────────────────────────────
+// Labeled-coordinate overloads — forward to 0-based core methods
+bool TicTacToe::isAvailable(char rowLabel, int colLabel) const {
+    int r = rowIndexFromLabel(rowLabel);
+    int c = colIndexFromLabel(colLabel);
+    if (r < 0 || c < 0) return false;
+    return isAvailable(r, c);
+}
+
+bool TicTacToe::placeMark(char rowLabel, int colLabel) {
+    int r = rowIndexFromLabel(rowLabel);
+    int c = colIndexFromLabel(colLabel);
+    if (r < 0 || c < 0) return false;
+    return placeMark(r, c);
+}
+
+void TicTacToe::playerMove(char rowLabel, int colLabel) {
+    if (state != GameState::RUNNING) return;
+    if (placeMark(rowLabel, colLabel)) {
+        state = evaluateBoard();
+        if (state == GameState::RUNNING) switchTurn();
+    } else {
+        std::cout << "Invalid move. Use rows A-C and columns 1-3, and choose an empty cell.\n";
+    }
 }
