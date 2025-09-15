@@ -1,28 +1,61 @@
 cmake_minimum_required(VERSION 3.20)
 project(tictactoe LANGUAGES CXX)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(${PROJECT_NAME}
-  main.cpp
-  src/Logic.cpp
-  # src/Interface.cpp   # leave out if it has its own main()
-)
+# ---- Discover sources ----
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(SOURCES "")
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+# All sources under src/
+if (EXISTS "${SRC_DIR}")
+  file(GLOB_RECURSE SRC_SOURCES CONFIGURE_DEPENDS
+       "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.cxx" "${SRC_DIR}/*.c")
+  list(APPEND SOURCES ${SRC_SOURCES})
+endif()
+
+# Sources in repo root
+file(GLOB ROOT_SOURCES CONFIGURE_DEPENDS
+     "${CMAKE_SOURCE_DIR}/*.cpp" "${CMAKE_SOURCE_DIR}/*.cxx" "${CMAKE_SOURCE_DIR}/*.c")
+
+# Prefer src/main.cpp over root/main.cpp
+set(ROOT_MAIN "${CMAKE_SOURCE_DIR}/main.cpp")
+set(SRC_MAIN  "${SRC_DIR}/main.cpp")
+if (EXISTS "${SRC_MAIN}" AND EXISTS "${ROOT_MAIN}")
+  list(REMOVE_ITEM ROOT_SOURCES "${ROOT_MAIN}")
+endif()
+
+# Combine
+list(APPEND SOURCES ${ROOT_SOURCES})
+
+if (SOURCES STREQUAL "")
+  message(FATAL_ERROR "No source files found. Put .cpp files in 'src/' or in the project root.")
+endif()
+
+# ---- Target ----
+add_executable(tictactoe ${SOURCES})
+
+# Include paths for headers
+target_include_directories(tictactoe PRIVATE
+  "${CMAKE_SOURCE_DIR}"
   "${CMAKE_SOURCE_DIR}/src"
   "${CMAKE_SOURCE_DIR}/include"
 )
 
-# Embed icon from app.ico
-if(WIN32 AND EXISTS "${CMAKE_SOURCE_DIR}/app.ico")
-  file(WRITE "${CMAKE_BINARY_DIR}/appicon.rc"
-    "IDI_APP_ICON ICON \"${CMAKE_SOURCE_DIR}/app.ico\"\n")
-  target_sources(${PROJECT_NAME} PRIVATE "${CMAKE_BINARY_DIR}/appicon.rc")
+# Warnings
+if (MSVC)
+  target_compile_options(tictactoe PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(tictactoe PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-# Static runtime for a more standalone feel
-if(MSVC)
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+# Optional: Windows icon (drop app.ico next to this file)
+if (WIN32)
+  set(APP_ICON "${CMAKE_SOURCE_DIR}/app.ico")
+  if (EXISTS "${APP_ICON}")
+    set(RC_PATH "${CMAKE_BINARY_DIR}/appicon.rc")
+    file(WRITE "${RC_PATH}" "1 ICON \"${APP_ICON}\"\n")
+    target_sources(tictactoe PRIVATE "${RC_PATH}")
+  endif()
 endif()
-

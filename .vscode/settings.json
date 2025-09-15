@@ -1,5 +1,7 @@
 {
-  "cmake.configureOnOpen": true,
-  "cmake.buildDirectory": "build",
-  "cmake.generator": "Ninja"
+  "files.autoSave": "onFocusChange",
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.postCommitCommand": "sync",
+  "git.confirmSync": false
 }

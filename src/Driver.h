@@ -1,55 +1,42 @@
-
-//driver.h
-
-#pragma once                // Ensure this header is included only once per TU
-#include <array>            // Fixed-size 2D array for the board
-#include <utility>          // std::pair (used by CPU move)
+#pragma once // Ensures the header is included only once during compilation
+#include <array> // Include the array header for std::array usage
 
 // High-level state of a single round of Tic-Tac-Toe.
-// We separate "round state" (who won / running / tie) from "running scores".
 enum class GameState {
-    RUNNING,    // The round is still in progress
-    HUMAN_WIN,  // Human ('X') achieved 3-in-a-row
-    CPU_WIN,    // Computer ('O') achieved 3-in-a-row
-    TIE         // Board has no spaces left and no winner
+    RUNNING,    // The game is currently ongoing
+    HUMAN_WIN,  // The human player has won the game
+    CPU_WIN,    // The CPU player has won the game
+    TIE         // The game ended in a tie
 };
 
 // The TicTacToe class encapsulates board data, rules, and round/score logic.
 class TicTacToe {
 private:
-    // 3x3 grid; each cell is 'X', 'O', or ' ' (space = empty).
-    std::array<std::array<char, 3>, 3> board{};
-
-    // Current outcome of the round; drives the main game loop.
-    GameState state = GameState::RUNNING;
-
-    // Whose turn is it? Human = 'X', CPU = 'O'.
-    char currentPlayer = 'X';
-
-    // Cumulative scores across multiple rounds in the same program run.
-    int scoreHuman = 0;
-    int scoreCPU = 0;
+    std::array<std::array<char, 3>, 3> board{}; // 3x3 board holding 'X', 'O', or ' ' (space) for empty
+    GameState state = GameState::RUNNING;       // Current state of the game (RUNNING, HUMAN_WIN, etc.)
+    char currentPlayer = 'X';                   // Current player: 'X' for human, 'O' for CPU
+    int scoreHuman = 0;                         // Accumulated score for the human player
+    int scoreCPU   = 0;                         // Accumulated score for the CPU player
 
 public:
-    // Constructor: initializes scores and prepares the first round.
-    TicTacToe();
+    TicTacToe();                                // Constructor to initialize the game
 
-    // ===== Round Lifecycle =====
-    void resetGame();                  // Clear board, set RUNNING, human starts
-    void drawBoard() const;            // Pretty-print the 3x3 grid
+    // Round lifecycle
+    void resetGame();                           // Reset the board, set state to RUNNING, and set human as starter
+    void drawBoard() const;                     // Display the current state of the 3x3 board
 
-    // ===== Core Moves & Rules =====
-    bool placeMark(int row, int col);  // Try to drop 'X' or 'O' at (row,col) if empty
-    void playerMove(int row, int col); // Human move wrapper (validates + turn logic)
-    void computerMove();               // CPU picks a random empty cell
-    GameState evaluateBoard() const;   // Check rows/cols/diagonals for a winner; tie/full
-    bool isAvailable(int row, int col) const; // Is (row,col) in-bounds and empty?
-    void switchTurn();                 // Toggle 'X' <-> 'O'
+    // Core rules
+    bool placeMark(int row, int col);           // Attempt to place the current player's mark at (row, col)
+    void playerMove(int row, int col);          // Process a human player's move at (row, col)
+    void computerMove();                        // Process a CPU player's move
+    GameState evaluateBoard() const;            // Evaluate and return the current board state (win/tie/running)
+    bool isAvailable(int row, int col) const;   // Check if the cell at (row, col) is available for a move
+    void switchTurn();                          // Switch to the other player's turn
 
-    // ===== Output / Feedback =====
-    void printResult();                // Announce winner/tie and update running scores
-    void printScores() const;          // Show cumulative scores
+    // Output / feedback
+    void printResult();                         // Print the result of the round (win/tie)
+    void printScores() const;                   // Print the current scores for both players
 
-    // Helper for the main loop to read the current round state.
-    GameState getState() const { return state; }
+    // Read current round state
+    GameState getState() const { return state; } // Getter to access the current game state
 };
